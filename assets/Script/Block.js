@@ -35,17 +35,16 @@ cc.Class({
         cc.global.game.blockManager.status = 2
         this.state = STATE.BLOCKING
         // this.getComponent(cc.BoxCollider).enabled = false
-       // this.schedule(this.block, 0.2, this.score, 0)
-        this.taskId = setInterval(this.block.bind(this), 200)
+       this.schedule(this.block, 0.2, this.score, 0)
+       //  this.taskId = setInterval(this.block.bind(this), 200)
     },
     block: function () {
         console.log(cc.global.game.blockManager.status)
         if (cc.global.game.blockManager.status == 0) {
-            console.log(this.taskId)
-            if (this.taskId) {
-                console.log('fuck u')
-                clearInterval(this.taskId)
-            }
+            this.unschedule(this.block)
+            // if (this.taskId) {
+            //     clearInterval(this.taskId)
+            // }
             return
         }
         if (!cc.global.game.isCollision) {

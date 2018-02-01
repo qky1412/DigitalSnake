@@ -26,12 +26,13 @@ cc.Class({
             newBean = this.beanPool.get()
         }
         newBean.y = cc.winSize.height / 2 + newBean.height / 2
-        var randomPositon =  Math.floor(cc.winSize.width * Math.random())
-        if (randomPositon < newBean.width / 2) {
-            randomPositon = newBean.width / 2
-        } else if (randomPositon > cc.winSize.width - newBean.width / 2) {
-            randomPositon = cc.winSize.width - newBean.width / 2
-        }
+        var randomPositon = 150 * Math.floor(5 * Math.random()) + 50 + newBean.width / 2
+        // var randomPositon =  Math.floor(cc.winSize.width * Math.random())
+        // if (randomPositon < newBean.width / 2) {
+        //     randomPositon = newBean.width / 2
+        // } else if (randomPositon > cc.winSize.width - newBean.width / 2) {
+        //     randomPositon = cc.winSize.width - newBean.width / 2
+        // }
         newBean.x = randomPositon
         newBean.getComponent('Bean').init()
         this.node.addChild(newBean)
