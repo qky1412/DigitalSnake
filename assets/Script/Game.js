@@ -1,6 +1,12 @@
  var Snake = require('Snake')
  var BeanManager = require('BeanManager')
  var BlockManager = require('BlockManager')
+ var GameStatus = cc.Enum({
+     welcome: 0,
+     begin: 1,
+     pause: 2,
+     end: 3
+ })
  var CollisionType = cc.Enum({
      BEAN: 0,
      BLOCK: 1,
@@ -18,7 +24,8 @@
     properties: {
         snake: Snake,
         beanManager: BeanManager,
-        blockManager: BlockManager
+        blockManager: BlockManager,
+        speed: 200
     },
 
     // use this for initialization
@@ -29,10 +36,11 @@
         cc.global.game.ct = CollisionType.BEAN
         cc.global.game.co = CollisionOrientation.NONE
         this.distance = 0
+        this.status = 0
 
         this.initAction()
         cc.director.getCollisionManager().enabled = true
-        cc.director.getCollisionManager().enabledDebugDraw = true
+        //cc.director.getCollisionManager().enabledDebugDraw = true
         if (this.beanManager) {
             this.beanManager.init()
         }
@@ -43,19 +51,24 @@
 
     // called every frame
     update: function (dt) {
-        if (!(cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 3)) {
+        if ((cc.global.game.blockManager.status == 1)) {
             this.distance += (200 / 60)
-            if (Math.floor(this.distance / 200) == 5) {
+            if (Math.floor(this.distance / 200) == 4) {
                 this.distance = 0
-                if (this.beanManager) {
-                    this.beanManager.createBean()
-                }
+                this.createBeanAndBlock()
             }
         }
     },
 
+    createBeanAndBlock: function () {
+        if (this.beanManager && this.blockManager) {
+            this.beanManager.createBean()
+            this.blockManager.createBlock()
+        }
+    },
+
     initAction: function () {
-        
+        this.status = 1
         if (this.snake) {
             this.node.on("touchmove", this.dragMove, this);
         }

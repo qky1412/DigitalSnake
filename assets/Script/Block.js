@@ -28,43 +28,61 @@ cc.Class({
     },
     init: function () {
         this.state = STATE.NORMAL
-        this.score = 1 +  Math.floor(19 * Math.random())
+        this.score = 1 +  Math.floor(10 * Math.random())
         this.scoreLabel.string = this.score + ''
     },
     beginBlock: function () {
-        cc.global.game.blockManager.status = 2
+        console.log('beginBlock')
         this.state = STATE.BLOCKING
+        cc.global.game.blockManager.addBlock(this.node)
         // this.getComponent(cc.BoxCollider).enabled = false
-       this.schedule(this.block, 0.2, this.score, 0)
-       //  this.taskId = setInterval(this.block.bind(this), 200)
-    },
-    block: function () {
-        console.log(cc.global.game.blockManager.status)
-        if (cc.global.game.blockManager.status == 0) {
-            this.unschedule(this.block)
-            // if (this.taskId) {
-            //     clearInterval(this.taskId)
-            // }
-            return
-        }
-        if (!cc.global.game.isCollision) {
-            cc.global.game.blockManager.status = 1
-            return
-        }
         this.score -= 1
         this.scoreLabel.string = this.score
         if (this.score == 0) {
-            cc.global.game.blockManager.status = 1
+            this.state = STATE.FINISH
+            cc.global.game.blockManager.removeBlock(this.node)
             this.node.destroy()
-            cc.global.game.isCollision = false
         }
         cc.global.game.snake.score -= 1
         cc.global.game.snake.scoreLabel.string = cc.global.game.snake.score
         if (cc.global.game.snake.score <= 0) {
             //game over
-            cc.global.game.blockManager.status = 0
+            cc.global.game.status = 3
             return
         }
-        
-    }
+
+        this.schedule(this.block, 0.2, this.score, 0)
+    },
+    block: function () {
+        if (cc.global.game.blockManager.status == 0) {
+            this.unschedule(this.block)
+            return
+        }
+        // if (!cc.global.game.isCollision) {
+        //     cc.global.game.blockManager.status = 1
+        //     return
+        // }
+        this.score -= 1
+        this.scoreLabel.string = this.score
+        if (this.score == 0) {
+            this.state = STATE.FINISH
+            cc.global.game.blockManager.removeBlock(this.node)
+            this.node.destroy()
+        }
+        cc.global.game.snake.score -= 1
+        cc.global.game.snake.scoreLabel.string = cc.global.game.snake.score
+        if (cc.global.game.snake.score <= 0) {
+            //game over
+            cc.global.game.status = 3
+            return
+        }
+    },
+    onCollisionExit: function(other, self) {
+        //如果是snake
+        if(other.tag == 0) {
+            console.log('block onCollisionExit')
+            this.unschedule(this.block)
+            cc.global.game.co = 0
+        }
+    },
 });

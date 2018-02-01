@@ -339,8 +339,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50,
-      "height": 50
+      "width": 40,
+      "height": 40
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -469,8 +469,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 22.25,
-      "height": 40
+      "width": 13.35,
+      "height": 24
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -497,9 +497,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 40,
-    "_fontSize": 40,
-    "_lineHeight": 40,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
+    "_lineHeight": 24,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -569,7 +569,8 @@
     "_enabled": true,
     "snake": null,
     "beanManager": null,
-    "blockManager": null
+    "blockManager": null,
+    "speed": 200
   },
   {
     "__type__": "cc.Node",
@@ -798,6 +799,7 @@
     },
     "blockManager": {
       "__id__": 22
-    }
+    },
+    "speed": 200
   }
 ]

@@ -23,41 +23,59 @@ cc.Class({
             let bean = other.node.getComponent('Bean')
             this.score += bean.score
             this.scoreLabel.string = this.score
-            
+            return
         } else if (other.tag == 200) {
+            console.log('snake onCollisionEnter')
             cc.global.game.ct = 1
             var otherAabb = other.world.aabb
             var otherPreAabb = other.world.preAabb.clone()
 
             var selfAabb = self.world.aabb
             var selfPreAabb = self.world.preAabb.clone()
+            
+            //check y-axis collision first
+            selfPreAabb.y = selfAabb.y
+            otherPreAabb.y = otherAabb.y
+            let blockRank = ((otherAabb.x ) / 150 + 1 )
+
+           
+
+            if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
+                console.log('碰到block' + blockRank + '的底部')
+                this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
+                other.node.getComponent('Block').beginBlock()
+                return
+            }
+
+             //如果当前已经是处于blocking状态，那么这时候无视后续逻辑
+             if (cc.global.game.blockManager.status == 2) {
+                 console.log('已经是处于blocking状态')
+                 other.node.getComponent('Block').beginBlock()
+                return
+            }
 
             selfPreAabb.x = selfAabb.x
             otherPreAabb.x = otherAabb.x
 
+            
+
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
                 if (selfPreAabb.xMax > otherPreAabb.xMax) {
                     cc.global.game.co = 2
-                    console.log('碰到block的右边')
-                    console.log('otherPreAabb.xMax = ' + otherPreAabb.xMax)
+                    console.log('碰到block' + blockRank + '的右边')
                     this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
                 } else if (selfPreAabb.xMin < otherPreAabb.xMin) {
                     cc.global.game.co = 1
-                    console.log('碰到block的左边')
-                    console.log('otherPreAabb.xMin = ' + otherPreAabb.xMin)
+                    console.log('碰到block' + blockRank + '的左边')
                     this.node.x = otherPreAabb.xMin - selfPreAabb.width / 2 - this.node.parent.x
                 }
-            } else {
-                cc.global.game.co = 3
-                console.log('碰到block的底部')
-                other.node.getComponent('Block').beginBlock()
-            }
+                return
+            } 
         }
     },
     onCollisionExit: function (other, self) {
-        console.log('onCollisionExit')
-        cc.global.game.isCollision = false
-        cc.global.game.ct = 1
-        cc.global.game.co = 0
+        if (other.tag == 200) {
+            cc.global.game.blockManager.removeBlock(other.node)
+        }
     }
 });
