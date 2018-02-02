@@ -23,6 +23,7 @@ cc.Class({
             let bean = other.node.getComponent('Bean')
             this.score += bean.score
             this.scoreLabel.string = this.score
+            cc.global.game.snakeManager.addBody(bean.score)
             return
         } else if (other.tag == 200) {
             console.log('snake onCollisionEnter')

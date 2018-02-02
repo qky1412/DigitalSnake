@@ -37,6 +37,7 @@ cc.Class({
         cc.global.game.blockManager.addBlock(this.node)
         // this.getComponent(cc.BoxCollider).enabled = false
         this.score -= 1
+        cc.global.game.snakeManager.destroyBody()
         this.scoreLabel.string = this.score
         if (this.score == 0) {
             this.state = STATE.FINISH

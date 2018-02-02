@@ -1,6 +1,7 @@
  var Snake = require('Snake')
  var BeanManager = require('BeanManager')
  var BlockManager = require('BlockManager')
+ var SnakeManager = require('SnakeManager')
  var GameStatus = cc.Enum({
      welcome: 0,
      begin: 1,
@@ -25,6 +26,7 @@
         snake: Snake,
         beanManager: BeanManager,
         blockManager: BlockManager,
+        snakeManager: SnakeManager,
         speed: 200
     },
 
@@ -40,6 +42,7 @@
 
         this.initAction()
         cc.director.getCollisionManager().enabled = true
+        cc.director.getPhysicsManager().enabled = true;
         //cc.director.getCollisionManager().enabledDebugDraw = true
         if (this.beanManager) {
             this.beanManager.init()
@@ -89,7 +92,8 @@
         }
 
         if (this.snake.node.x + distance <= maxX && this.snake.node.x + distance >= minX) {
-            this.snake.node.x += distance
+            this.snakeManager.snakeMove(distance)
+            // this.snake.node.x += distance
         }
     }
 });
