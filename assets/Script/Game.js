@@ -27,7 +27,8 @@
         beanManager: BeanManager,
         blockManager: BlockManager,
         snakeManager: SnakeManager,
-        speed: 300
+        speed: 300,
+        screenLine: cc.Node
     },
 
     // use this for initialization
@@ -37,12 +38,10 @@
         cc.global.game.isCollision = false
         cc.global.game.ct = CollisionType.BEAN
         cc.global.game.co = CollisionOrientation.NONE
-        this.distance = 0
         this.status = 0
 
-        this.initAction()
+        
         cc.director.getCollisionManager().enabled = true
-        cc.director.getPhysicsManager().enabled = true;
         //cc.director.getCollisionManager().enabledDebugDraw = true
         if (this.beanManager) {
             this.beanManager.init()
@@ -50,30 +49,43 @@
         if (this.blockManager) {
             this.blockManager.init()
         }
+
+        this.initAction()
     },
 
     // called every frame
     update: function (dt) {
         if ((cc.global.game.blockManager.status == 1)) {
-            this.distance += (cc.global.game.speed / 60)
-            if (Math.floor(this.distance / cc.global.game.speed) == 4) {
-                this.distance = 0
-                this.createBeanAndBlock()
+            if (this.snake && this.screenLine) {
+                let distance = this.snake.node.y - this.screenLine.y
+                if (distance > this.offset && !this.isCreating) {
+                    this.isCreating = true
+                    this.screenLine.y = this.snake.node.y
+                    let currentY = this.snake.node.y
+                    this.createBeanAndBlock(currentY)
+                    this.isCreating = false
+                }
             }
         }
     },
 
-    createBeanAndBlock: function () {
+    reset: function () {
+
+    },
+
+    createBeanAndBlock: function (currentY) {
         if (this.beanManager && this.blockManager) {
-            this.beanManager.createBean()
-            this.blockManager.createBlock()
+            this.beanManager.createBean(currentY)
+            this.blockManager.createBlock(currentY)
         }
     },
 
     initAction: function () {
         this.status = 1
+        
         if (this.snake) {
-            this.node.on("touchmove", this.dragMove, this);
+            this.offset = (cc.winSize.height / 2  + this.snake.node.height / 2)
+            cc.find('Canvas').on("touchmove", this.dragMove, this)
         }
     },
     dragMove: function (event) {
@@ -92,8 +104,8 @@
         }
 
         if (this.snake.node.x + distance <= maxX && this.snake.node.x + distance >= minX) {
-            this.snakeManager.snakeMove(distance)
-            // this.snake.node.x += distance
+            //this.snakeManager.snakeMove(distance)
+            this.snake.node.x += distance
         }
     }
 });

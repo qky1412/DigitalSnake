@@ -14,7 +14,11 @@ cc.Class({
 
     },
 
-    // update (dt) {},
+    update (dt) {
+        if (cc.global.game.blockManager.status == 1) {
+            this.node.y += cc.global.game.speed * dt
+        }
+    },
     onCollisionEnter: function(other, self) {
         //如果是bean
         cc.global.game.isCollision = true
@@ -37,20 +41,20 @@ cc.Class({
             //check y-axis collision first
             selfPreAabb.y = selfAabb.y
             otherPreAabb.y = otherAabb.y
-            let blockRank = ((otherAabb.x ) / 150 + 1 )
+            //let blockRank = ((otherAabb.x ) / 150 + 1 )
 
            
 
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
-                console.log('碰到block' + blockRank + '的底部')
-                this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
+                //console.log('碰到block' + blockRank + '的底部')
+                //this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
                 other.node.getComponent('Block').beginBlock()
                 return
             }
 
              //如果当前已经是处于blocking状态，那么这时候无视后续逻辑
              if (cc.global.game.blockManager.status == 2) {
-                 console.log('已经是处于blocking状态')
+                 //console.log('已经是处于blocking状态')
                  other.node.getComponent('Block').beginBlock()
                 return
             }
@@ -63,11 +67,11 @@ cc.Class({
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
                 if (selfPreAabb.xMax > otherPreAabb.xMax) {
                     cc.global.game.co = 2
-                    console.log('碰到block' + blockRank + '的右边')
+                    //console.log('碰到block' + blockRank + '的右边')
                     this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
                 } else if (selfPreAabb.xMin < otherPreAabb.xMin) {
                     cc.global.game.co = 1
-                    console.log('碰到block' + blockRank + '的左边')
+                    //console.log('碰到block' + blockRank + '的左边')
                     this.node.x = otherPreAabb.xMin - selfPreAabb.width / 2 - this.node.parent.x
                 }
                 return
@@ -76,7 +80,7 @@ cc.Class({
     },
     onCollisionExit: function (other, self) {
         if (other.tag == 200) {
-            cc.global.game.blockManager.removeBlock(other.node)
+            cc.global.game.blockManager.removeBlock()
         }
     }
 });

@@ -17,12 +17,6 @@ cc.Class({
         }
     },
 
-    update (dt) {
-        if(cc.global.game.blockManager.status == 1){
-            this.node.y -= cc.global.game.speed * dt;
-        }
-    },
-
     init: function () {
         this.state = STATE.NORMAL
         this.score = 1 +  Math.floor(5 * Math.random())
@@ -31,7 +25,7 @@ cc.Class({
     onCollisionEnter: function(other, self) {
         if (other.tag == 0) {
             this.getComponent(cc.BoxCollider).enabled = false
-            this.node.destroy()
+            cc.global.game.beanManager.recycle(this.node)
         }
     },
 
