@@ -3,7 +3,10 @@ cc.Class({
 
     properties: {
         score: 4,
-        scoreLabel: cc.Label
+        scoreLabel: cc.Label,
+        nextBody: cc.Node,
+        lastBody: cc.Node,
+        duration: 30
     },
 
     // LIFE-CYCLE CALLBACKS:
