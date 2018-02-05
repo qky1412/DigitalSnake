@@ -23,7 +23,7 @@ cc.Class({
 
     update (dt) {
         if(cc.global.game.blockManager.status == 1) {
-            this.node.y -= 200 * dt;
+            this.node.y -= cc.global.game.speed * dt;
         }
     },
     init: function () {
@@ -52,7 +52,7 @@ cc.Class({
             return
         }
 
-        this.schedule(this.block, 0.2, this.score, 0)
+        this.schedule(this.block, 0.15, this.score, 0)
     },
     block: function () {
         if (cc.global.game.blockManager.status == 0) {

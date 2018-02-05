@@ -1340,6 +1340,7 @@
     },
     "component": "SnakeManager",
     "handler": "destroyBody",
-    "customEventData": ""
+    "customEventData": "",
+    "speed": 300
   }
 ]

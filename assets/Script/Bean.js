@@ -19,7 +19,7 @@ cc.Class({
 
     update (dt) {
         if(cc.global.game.blockManager.status == 1){
-            this.node.y -= 200 * dt;
+            this.node.y -= cc.global.game.speed * dt;
         }
     },
 

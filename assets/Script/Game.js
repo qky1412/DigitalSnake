@@ -27,7 +27,7 @@
         beanManager: BeanManager,
         blockManager: BlockManager,
         snakeManager: SnakeManager,
-        speed: 200
+        speed: 300
     },
 
     // use this for initialization
@@ -55,8 +55,8 @@
     // called every frame
     update: function (dt) {
         if ((cc.global.game.blockManager.status == 1)) {
-            this.distance += (200 / 60)
-            if (Math.floor(this.distance / 200) == 4) {
+            this.distance += (cc.global.game.speed / 60)
+            if (Math.floor(this.distance / cc.global.game.speed) == 4) {
                 this.distance = 0
                 this.createBeanAndBlock()
             }
