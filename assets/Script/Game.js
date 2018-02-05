@@ -104,7 +104,6 @@
         }
 
         if (this.snake.node.x + distance <= maxX && this.snake.node.x + distance >= minX) {
-            //this.snakeManager.snakeMove(distance)
             this.snake.node.x += distance
         }
     }

@@ -8,8 +8,12 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        if (!cc.global) {
+            cc.global = {}
+        }
+        cc.global.snakeManager = this
         this.bodys = []
-        this.bodys.push(this.head)
+        this.head = this.head.getComponent('Snake')
 
         this.snakeBodyPool = new cc.NodePool()
         let initCount = 30
@@ -17,6 +21,8 @@ cc.Class({
             let body = cc.instantiate(this.prefab)
             this.snakeBodyPool.put(body)
         }
+
+        this.addBody(3)
     },
 
     onDestroy: function () {
@@ -32,28 +38,45 @@ cc.Class({
     },
 
     addBody: function (count) {
-        for (var i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             this.createBody()
         }
     },
 
     createBody: function () {
+        console.log('create body')
         let body = null
         if (this.snakeBodyPool.size() > 0) {
             body = this.snakeBodyPool.get()
         } else {
             body = cc.instantiate(this.prefab)
         }
-        body.parent = this.head.parent
+        body.parent = this.head.node.parent
+        if (this.head.lastBody) {
+            var last = this.head.lastBody
+            body.y = last.y - 55
+            body.x = last.x
+            last.nextBody = body
+            body.getComponent('SnakeBody').beforeBody = last
+            this.head.lastBody = body
+        } else {
+            body.y = this.head.node.y - 55
+            body.x = this.head.node.x
+            this.head.nextBody = body
+            body.getComponent('SnakeBody').beforeBody = this.head.node
+            this.head.lastBody = body
+        }
+        this.bodys.push(body)
     },
 
     destroyBody: function () {
-        if (this.bodys.length == 1) return
+        console.log('destroy body')
         this.snakeBodyPool.put(this.bodys.pop())
+        this.head.lastBody = this.bodys[this.bodys.length - 1]
     },
 
     // called every frame, uncomment this function to activate update callback
-    update: function (dt) {
-
-    },
+    // update: function (dt) {
+    //
+    // },
 })

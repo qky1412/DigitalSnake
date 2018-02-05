@@ -34,7 +34,9 @@ cc.Class({
         this.block()
         this.schedule(this.block, 0.15, this.score, 0)
     },
+
     block: function () {
+        cc.global.game.snakeManager.destroyBody()
         if (cc.global.game.blockManager.status == 0) {
             this.unschedule(this.block)
             return
