@@ -15,13 +15,9 @@ cc.Class({
         var self = this
         this.num = 0
         this.node.on(cc.Node.EventType.TOUCH_END, function () {
-            if (cc.global.mapType == 100) {
-                self.num = 100
-                self.label.string = 100
-            } else {
-                cc.global.inputNumberDialog.mapItem = self
-                cc.global.inputNumberDialog.show()
-            }
+            console.log('type : ' + cc.global.mapType)
+            cc.global.inputNumberDialog.mapItem = self
+            cc.global.inputNumberDialog.show()
         }, this)
     },
 
@@ -34,4 +30,4 @@ cc.Class({
     // update: function (dt) {
 
     // },
-});
+})

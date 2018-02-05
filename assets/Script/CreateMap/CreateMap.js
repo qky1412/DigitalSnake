@@ -13,12 +13,6 @@ cc.Class({
             cc.global = {}
         }
         cc.global.createMap = this
-        cc.global.mapType = -1
-    },
-
-    selectType: function (event, data) {
-        var type = parseInt(data)
-        cc.global.mapType = type
     },
 
     createGrid: function () {
@@ -39,10 +33,6 @@ cc.Class({
         }
     },
 
-    revert: function () {
-
-    },
-
     clean: function () {
         this.layout.children.forEach(function (item) {
             item.destroy()
@@ -50,9 +40,13 @@ cc.Class({
     },
 
     createMap: function () {
+        var children = this.layout.children
+        if (!children || children.length == 0) {
+            console.log('请先生成网格')
+            return
+        }
         var dataSet = []
         var line = 0
-        var children = this.layout.children
         while (line < this.line) {
             var lineDataSet = []
             for (let i = 5 * line; i <= 5 * line + 4; i++) {

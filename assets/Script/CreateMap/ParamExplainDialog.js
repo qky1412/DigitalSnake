@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
+        label: cc.Label
     },
 
     // use this for initialization
@@ -11,7 +11,7 @@ cc.Class({
             cc.global = {}
         }
         cc.global.paramExplainDialog = this
-
+        this.label.string = '100：右边存在墙\n' + '101：当前可能为星星\n' + '201-203：利用公式随机生成 block\n' + '小于0的数：指定的 block'
         var self = this
         this.node.on(cc.Node.EventType.TOUCH_END, function () {
             self.hide()

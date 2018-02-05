@@ -11,6 +11,7 @@ cc.Class({
             cc.global = {}
         }
         cc.global.inputNumberDialog = this
+        cc.global.mapType = -1
         this.node.on(cc.Node.EventType.TOUCH_END, function () {
 
         }, this)
@@ -18,6 +19,15 @@ cc.Class({
         this.node.scaleX = 1
         this.node.scaleY = 1
         this.node.active = false
+    },
+
+    onEnable: function () {
+        if (cc.global.mapType === 100) {
+            // 墙
+            this.editBox.node.active = false
+        } else {
+            this.editBox.node.active = true
+        }
     },
 
     show: function () {
@@ -33,6 +43,13 @@ cc.Class({
     },
 
     confirm: function () {
+        if (cc.global.mapType === 100) {
+            // wall
+            this.mapItem.set(100)
+            this.editBox.string = ''
+            this.hide()
+            return
+        }
         var num = this.editBox.string
         if (num.length == 0) {
             console.log('请输入数字')
@@ -44,6 +61,7 @@ cc.Class({
             return
         }
         if (cc.global.mapType === 1) {
+            // bean
             if (num > 5) {
                 console.log('请输入小于5的数字')
                 return
@@ -56,6 +74,17 @@ cc.Class({
 
     cancel: function () {
         this.hide()
+    },
+
+    selectType: function (event, data) {
+        var type = parseInt(data)
+        cc.global.mapType = type
+        if (cc.global.mapType === 100) {
+            // 墙
+            this.editBox.node.active = false
+        } else {
+            this.editBox.node.active = true
+        }
     },
 
     directInput: function (event, data) {
