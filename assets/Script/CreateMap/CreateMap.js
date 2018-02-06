@@ -46,16 +46,25 @@ cc.Class({
             return
         }
         var dataSet = []
+        var dataSetStr = '['
         var line = 0
         while (line < this.line) {
             var lineDataSet = []
+            var lineDataSetStr = '['
             for (let i = 5 * line; i <= 5 * line + 4; i++) {
+                lineDataSetStr += children[i].getComponent('MapItem').num + ','
                 lineDataSet.push(children[i].getComponent('MapItem').num)
             }
+            lineDataSetStr = lineDataSetStr.substring(0, lineDataSetStr.length - 1)
+            lineDataSetStr += '],'
+            dataSetStr += lineDataSetStr
             dataSet[line] = lineDataSet
             line++
         }
+        dataSetStr = dataSetStr.substring(0, dataSetStr.length - 1)
+        dataSetStr += ']'
         console.log(dataSet)
+        alert(dataSetStr)
     },
 
     paramExplain: function () {
