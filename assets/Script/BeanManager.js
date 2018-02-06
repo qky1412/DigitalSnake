@@ -61,6 +61,12 @@ cc.Class({
             node.active = false
             this.beanPool.push(node)
         }
+    },
+
+    clear: function () {
+        this.node.children.forEach(function (item) {
+            item.destroy()
+        })
     }
 
 });

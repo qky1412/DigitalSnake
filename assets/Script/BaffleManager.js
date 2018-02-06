@@ -50,5 +50,10 @@ cc.Class({
             newBaffle.active = true
             newBaffle.getComponent(cc.BoxCollider).enabled = true
         }
+    },
+    clear: function () {
+        this.node.children.forEach(function (item) {
+            item.destroy()
+        })
     }
 });

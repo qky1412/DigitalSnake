@@ -30,7 +30,10 @@
         snakeManager: SnakeManager,
         baffleManager: BaffleManager,
         speed: 300,
-        screenLine: cc.Node
+        screenLine: cc.Node,
+        score: 0,
+        scoreLabel: cc.Label,
+        gameOverDialog: cc.Node
     },
 
     // use this for initialization
@@ -40,22 +43,12 @@
         cc.global.game.isCollision = false
         cc.global.game.ct = CollisionType.BEAN
         cc.global.game.co = CollisionOrientation.NONE
-        this.status = 0
+        this.status = GameStatus.welcome
 
         
         cc.director.getCollisionManager().enabled = true
         //cc.director.getCollisionManager().enabledDebugDraw = true
-        if (this.beanManager) {
-            this.beanManager.init()
-        }
-        if (this.blockManager) {
-            this.blockManager.init()
-        }
-
-        if (this.baffleManager) {
-            this.baffleManager.init()
-        }
-
+        
         this.initAction()
     },
 
@@ -88,8 +81,27 @@
     },
 
     initAction: function () {
-        this.status = 1
+        if (this.snake && this.screenLine) {
+            this.snake.node.x = 0
+            this.snake.node.y = cc.winSize.height / 2
+            this.screenLine.y = cc.winSize.height
+        }
+        if (this.beanManager) {
+            this.beanManager.init()
+        }
+        if (this.blockManager) {
+            this.blockManager.init()
+        }
+
+        if (this.baffleManager) {
+            this.baffleManager.init()
+        }
+        this.score = 0
+        if (this.scoreLabel) {
+            this.scoreLabel.string = this.score
+        }
         
+        this.status = GameStatus.begin
         if (this.snake) {
             this.offset = (cc.winSize.height / 2)
             cc.find('Canvas').on("touchmove", this.dragMove, this)
@@ -127,5 +139,20 @@
         if (this.snake.node.x + this.distance <= maxX && this.snake.node.x + this.distance >= minX) {
             this.snake.node.x += this.distance
         }
+    },
+    gameOver: function () {
+        this.status = GameStatus.end
+        this.gameOverDialog.active = true
+    },
+
+    gameRestart: function () {
+        //remove screen's other components if exist
+        this.gameOverDialog.active = false
+        if (this.beanManager && this.blockManager && this.baffleManager) {
+            this.beanManager.clear()
+            this.blockManager.clear()
+            this.baffleManager.clear()
+        }
+        this.initAction()
     }
 });

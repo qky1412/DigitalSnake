@@ -44,6 +44,8 @@ cc.Class({
         //     cc.global.game.blockManager.status = 1
         //     return
         // }
+        cc.global.game.score++
+        cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
         this.scoreLabel.string = this.score
         if (this.score == 0) {
@@ -56,7 +58,7 @@ cc.Class({
         cc.global.game.snake.scoreLabel.string = cc.global.game.snake.score
         if (cc.global.game.snake.score <= 0) {
             //game over
-            cc.global.game.status = 3
+            cc.global.game.gameOver()
             return
         }
     },
