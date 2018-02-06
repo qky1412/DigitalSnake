@@ -32,7 +32,7 @@ cc.Class({
         this.duration = this.beforeBody.duration
         setTimeout(function () {
             node.x = x
-            // node.y = y
+            node.y = y - 55
         }, this.duration)
     },
 })
