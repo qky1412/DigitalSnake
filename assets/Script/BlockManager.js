@@ -20,12 +20,12 @@ cc.Class({
 
     init: function () {
         this.status = 1
-        this.blockPool = new cc.NodePool()
+        this.blockPool = []
         for(let i = 0; i < 20; i++) {
             let newBlock = cc.instantiate(this.block)
-            //newBlock.parent = this.node
-            //newBlock.active = false
-            this.blockPool.put(newBlock)
+            newBlock.parent = this.node
+            newBlock.active = false
+            this.blockPool.push(newBlock)
         }
         this.blockingNumber = 0
     },
@@ -52,26 +52,26 @@ cc.Class({
         }
     },
 
-    createBlock: function (currentY) {
+    create: function (currentY) {
         //remove previous blocks
         var self = this
         this.node.children.forEach(function (item) {
             if (item.y < currentY - (cc.winSize.height / 2)) {
-                console.log('recycle block')
-                self.blockPool.put(item)
+                item.active = false
+                self.blockPool.push(item)
             }
         })
 
         for(let i = 0; i < 5; i++) {
             var newBlock = null
-            if(this.blockPool.size() == 0) {
+            if(this.blockPool.length == 0) {
                 newBlock = cc.instantiate(this.block)
             }
             else {
-                newBlock = this.blockPool.get()
+                newBlock = this.blockPool.pop()
             }
-            newBlock.parent = this.node
-            newBlock.y = cc.winSize.height / 2 + newBlock.height / 2 + currentY
+            //newBlock.parent = this.node
+            newBlock.y = cc.winSize.height / 2 + newBlock.height / 2 + currentY + 200
             let positionX = i * newBlock.width + newBlock.width / 2
             newBlock.x = positionX
             newBlock.getComponent('Block').init()
@@ -82,7 +82,7 @@ cc.Class({
     recycle: function (node) {
         if (node) {
             node.active = false
-            this.blockPool.put(node)
+            this.blockPool.push(node)
         }
     }
 });

@@ -18,7 +18,7 @@ cc.Class({
     },
 
     update (dt) {
-        if (cc.global.game.blockManager.status == 1) {
+        if (cc.global.game.blockManager.status == 1 && cc.global.game.baffleManager.status == 1) {
             this.node.y += cc.global.game.speed * dt
         }
     },
@@ -33,7 +33,7 @@ cc.Class({
             cc.global.game.snakeManager.addBody(bean.score)
             return
         } else if (other.tag == 200) {
-            console.log('snake onCollisionEnter')
+            //console.log('snake block onCollisionEnter')
             cc.global.game.ct = 1
             var otherAabb = other.world.aabb
             var otherPreAabb = other.world.preAabb.clone()
@@ -46,11 +46,9 @@ cc.Class({
             otherPreAabb.y = otherAabb.y
             //let blockRank = ((otherAabb.x ) / 150 + 1 )
 
-           
-
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
                 //console.log('碰到block' + blockRank + '的底部')
-                //this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
+                this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
                 other.node.getComponent('Block').beginBlock()
                 return
             }
@@ -65,25 +63,61 @@ cc.Class({
             selfPreAabb.x = selfAabb.x
             otherPreAabb.x = otherAabb.x
 
-            
-
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
-                if (selfPreAabb.xMax > otherPreAabb.xMax) {
+                if (cc.global.game.distance < 0 && selfPreAabb.xMax > otherPreAabb.xMax) {
                     cc.global.game.co = 2
                     //console.log('碰到block' + blockRank + '的右边')
                     this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
-                } else if (selfPreAabb.xMin < otherPreAabb.xMin) {
+                } else if (cc.global.game.distance > 0 && selfPreAabb.xMin < otherPreAabb.xMin) {
                     cc.global.game.co = 1
                     //console.log('碰到block' + blockRank + '的左边')
                     this.node.x = otherPreAabb.xMin - selfPreAabb.width / 2 - this.node.parent.x
                 }
                 return
             } 
+        } else if (other.tag == 300) {
+            console.log('snake baffle onCollisionEnter')
+            cc.global.game.ct = 2
+            var otherAabb = other.world.aabb
+            var otherPreAabb = other.world.preAabb.clone()
+
+            var selfAabb = self.world.aabb
+            var selfPreAabb = self.world.preAabb.clone()
+            
+            selfPreAabb.x = selfAabb.x
+            otherPreAabb.x = otherAabb.x
+           
+            if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
+                console.log('碰到baffle')
+                if (cc.global.game.distance < 0 && selfPreAabb.xMax > otherPreAabb.xMax) {
+                    cc.global.game.co = 2
+                    console.log('碰到右边')
+                    this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
+                } else if (cc.global.game.distance > 0 && selfPreAabb.xMin < otherPreAabb.xMin) {
+                    cc.global.game.co = 1
+                    console.log('碰到左边')
+                    this.node.x = otherPreAabb.xMin - selfPreAabb.width / 2 - this.node.parent.x
+                } else {
+                    console.log('啥都不是')
+                }
+                return
+            } 
+            
+            selfPreAabb.y = selfAabb.y
+            otherPreAabb.y = otherAabb.y
+            
+            if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
+                console.log('碰到baffle底部')
+                if (selfPreAabb.yMin < otherPreAabb.yMin) {
+                    this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
+                    other.node.getComponent('Baffle').stop()
+                }
+                return
+            }
+
         }
     },
     onCollisionExit: function (other, self) {
-        if (other.tag == 200) {
-            cc.global.game.blockManager.removeBlock()
-        }
+        cc.global.game.co = 0
     }
 });

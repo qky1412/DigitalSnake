@@ -10,36 +10,35 @@ cc.Class({
 
     // onLoad () {},
 
-    start() {
-
-    },
     init: function () {
-        this.beanPool = new cc.NodePool()
+        this.beanPool = []
         for (let i = 0; i < 10; i++) {
             let newBean = cc.instantiate(this.bean)
-            this.beanPool.put(newBean)
+            newBean.parent = this.node
+            newBean.active = false
+            this.beanPool.push(newBean)
         }
     },
-    createBean: function (currentY) {
+    create: function (currentY) {
         var self = this
         this.node.children.forEach(function (item) {
-            if (item.y < currentY) {
-                console.log('recycle bean')
-                self.beanPool.put(item)
+            if (item.y < currentY - (cc.winSize.height / 2)) {
+                item.active = false
+                self.beanPool.push(item)
             }
         })
 
         let randomNumer = Math.floor(3 * Math.random()) + 1
         for (let i = 0; i < randomNumer; i++) {
             var newBean = null
-            if (this.beanPool.size() == 0) {
+            if (this.beanPool.length == 0) {
                 newBean = cc.instantiate(this.bean)
             }
             else {
-                newBean = this.beanPool.get()
+                newBean = this.beanPool.pop()
             }
-            newBean.parent = this.node
-            newBean.y = cc.winSize.height / 2 + newBean.height / 2 + currentY - 200
+            //newBean.parent = this.node
+            newBean.y = cc.winSize.height / 2 + newBean.height / 2 + currentY
             //var randomPositon = 150 * Math.floor(5 * Math.random()) + 50 + newBean.width / 2
             let positionX = 150 * i + 50 + newBean.width / 2
             newBean.x = positionX
@@ -52,14 +51,15 @@ cc.Class({
     onCollsionEnter: function (other, self) {
         //如果是豆子
         if (other.tag == 200) {
-            this.beanPool.put(other.node)
+            other.node.active = false
+            this.beanPool.push(other.node)
         }
     },
 
     recycle: function (node) {
         if (node) {
             node.active = false
-            this.beanPool.put(node)
+            this.beanPool.push(node)
         }
     }
 

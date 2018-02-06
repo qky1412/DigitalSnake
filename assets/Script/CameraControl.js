@@ -24,10 +24,6 @@ cc.Class({
         
         let targetPos = this.target.convertToWorldSpaceAR(cc.Vec2.ZERO)
         let currentY = this.node.parent.convertToNodeSpaceAR(targetPos).y
-        
-        if (currentY > this.lastY) {
-            this.node.y = this.lastY
-            this.lastY = currentY
-        }
+        this.node.y = currentY
     }
 });

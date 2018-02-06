@@ -44,7 +44,7 @@ cc.Class({
     },
 
     createBody: function () {
-        console.log('create body')
+        //console.log('create body')
         let body = null
         if (this.snakeBodyPool.size() > 0) {
             body = this.snakeBodyPool.get()
@@ -70,7 +70,7 @@ cc.Class({
     },
 
     destroyBody: function () {
-        console.log('destroy body')
+        //console.log('destroy body')
         this.snakeBodyPool.put(this.bodys.pop())
         this.head.lastBody = this.bodys[this.bodys.length - 1]
     },

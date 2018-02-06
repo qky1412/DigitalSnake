@@ -17,18 +17,13 @@ cc.Class({
         }
     },
 
-    start () {
-
-    },
-
-
     init: function () {
         this.state = STATE.NORMAL
         this.score = 1 +  Math.floor(10 * Math.random())
         this.scoreLabel.string = this.score + ''
     },
     beginBlock: function () {
-        console.log('beginBlock')
+        //console.log('beginBlock')
         this.state = STATE.BLOCKING
         cc.global.game.blockManager.addBlock()
         this.block()
@@ -68,9 +63,10 @@ cc.Class({
     onCollisionExit: function(other, self) {
         //如果是snake
         if(other.tag == 0) {
-            console.log('block onCollisionExit')
+            //console.log('block onCollisionExit')
             if (this.node && this.state != STATE.FINISH) {
-                console.log('block still exist')
+                //console.log('block still exist')
+                cc.global.game.blockManager.removeBlock()
                 this.unschedule(this.block)
             }
             cc.global.game.co = 0

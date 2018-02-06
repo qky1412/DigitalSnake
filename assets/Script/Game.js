@@ -2,6 +2,7 @@
  var BeanManager = require('BeanManager')
  var BlockManager = require('BlockManager')
  var SnakeManager = require('SnakeManager')
+ var BaffleManager = require('BaffleManager')
  var GameStatus = cc.Enum({
      welcome: 0,
      begin: 1,
@@ -27,6 +28,7 @@
         beanManager: BeanManager,
         blockManager: BlockManager,
         snakeManager: SnakeManager,
+        baffleManager: BaffleManager,
         speed: 300,
         screenLine: cc.Node
     },
@@ -50,19 +52,23 @@
             this.blockManager.init()
         }
 
+        if (this.baffleManager) {
+            this.baffleManager.init()
+        }
+
         this.initAction()
     },
 
     // called every frame
     update: function (dt) {
-        if ((cc.global.game.blockManager.status == 1)) {
+        if (cc.global.game.blockManager.status == 1 && cc.global.game.baffleManager.status == 1) {
             if (this.snake && this.screenLine) {
                 let distance = this.snake.node.y - this.screenLine.y
                 if (distance > this.offset && !this.isCreating) {
                     this.isCreating = true
                     this.screenLine.y = this.snake.node.y
                     let currentY = this.snake.node.y
-                    this.createBeanAndBlock(currentY)
+                    this.create(currentY)
                     this.isCreating = false
                 }
             }
@@ -73,10 +79,11 @@
 
     },
 
-    createBeanAndBlock: function (currentY) {
-        if (this.beanManager && this.blockManager) {
-            this.beanManager.createBean(currentY)
-            this.blockManager.createBlock(currentY)
+    create: function (currentY) {
+        if (this.beanManager && this.blockManager && this.baffleManager) {
+            this.beanManager.create(currentY)
+            this.blockManager.create(currentY)
+            this.baffleManager.create(currentY)
         }
     },
 
@@ -84,7 +91,7 @@
         this.status = 1
         
         if (this.snake) {
-            this.offset = (cc.winSize.height / 2  + this.snake.node.height / 2)
+            this.offset = (cc.winSize.height / 2)
             cc.find('Canvas').on("touchmove", this.dragMove, this)
         }
     },
@@ -93,18 +100,32 @@
         let currentX = event.touch.getLocationX()
         let maxX = this.node.width / 2 - this.snake.node.width / 2
         let minX = -maxX
-        let distance = currentX - preX
+        this.distance = currentX - preX
+        let maxSpeed = 30
+        if (Math.abs(this.distance) > maxSpeed) {
+            this.distance = this.distance < 0 ? -maxSpeed : maxSpeed
+        } 
 
-        if (distance > 0 && cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 1) {
+
+        if (this.distance > 0 && cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 1) {
             return
         }
 
-        if (distance < 0 && cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 2) {
+        if (this.distance < 0 && cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 2) {
             return
         }
 
-        if (this.snake.node.x + distance <= maxX && this.snake.node.x + distance >= minX) {
-            this.snake.node.x += distance
+        if (this.distance > 0 && cc.global.game.isCollision && cc.global.game.ct == 2 && cc.global.game.co == 1) {
+
+            return
+        }
+
+        if (this.distance < 0 && cc.global.game.isCollision && cc.global.game.ct == 2 && cc.global.game.co == 2) {
+            return
+        }
+
+        if (this.snake.node.x + this.distance <= maxX && this.snake.node.x + this.distance >= minX) {
+            this.snake.node.x += this.distance
         }
     }
 });
