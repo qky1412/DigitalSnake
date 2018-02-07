@@ -76,6 +76,12 @@ cc.Class({
         this.hide()
     },
 
+    delete: function () {
+        this.mapItem.set(0)
+        this.editBox.string = ''
+        this.hide()
+    },
+
     selectType: function (event, data) {
         var type = parseInt(data)
         cc.global.mapType = type
