@@ -14,9 +14,9 @@ cc.Class({
         block: cc.Prefab
     },
     
-    update (dt) {
-        this.status = this.getStatus()
-    },
+    // update (dt) {
+    //     this.status = this.getStatus()
+    // },
 
     init: function () {
         this.status = 1
@@ -27,14 +27,14 @@ cc.Class({
             newBlock.active = false
             this.blockPool.push(newBlock)
         }
-        this.blockingNumber = 0
+        this.blockings = []
     },
 
     getStatus: function () {
         if (cc.global.game.status != 1) {
             return 0
         }
-        if (this.blockingNumber == 0) {
+        if (this.blockings.length == 0) {
             return 1
         } else {
             return 2
@@ -42,14 +42,15 @@ cc.Class({
     },
 
     addBlock: function (blockNode) {
-        this.blockingNumber++
+        console.log('add block ' + blockNode.uuid)
+        if (this.blockings.indexOf(blockNode.uuid) == -1) {
+            this.blockings.push(blockNode.uuid)
+        }
     },
 
     removeBlock: function (blockNode) {
-        this.blockingNumber--
-        if (this.blockingNumber < 0) {
-            this.blockingNumber = 0
-        }
+        console.log('remove block ' + blockNode.uuid)
+        this.blockings.removeByValue(blockNode.uuid)
     },
 
     create: function (currentY) {

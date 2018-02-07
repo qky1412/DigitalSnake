@@ -12,13 +12,13 @@ cc.Class({
         this.lastY = 0
     },
 
-    // onEnable () {
-    //     cc.director.getCollisionManager().attachDebugDrawToCamera(this.camera)
-    // },
+    onEnable () {
+        cc.director.getCollisionManager().attachDebugDrawToCamera(this.camera)
+    },
 
-    // onDisable () {
-    //     cc.director.getCollisionManager().detachDebugDrawToCamera(this.camera)
-    // },
+    onDisable () {
+        cc.director.getCollisionManager().detachDebugDrawToCamera(this.camera)
+    },
 
     lateUpdate: function (dt) {
         

@@ -29,9 +29,15 @@
         blockManager: BlockManager,
         snakeManager: SnakeManager,
         baffleManager: BaffleManager,
-        speed: 300,
+        speed:  {
+            default: 200,
+            visible: false
+        },
         screenLine: cc.Node,
-        score: 0,
+        score: {
+            default: 0,
+            visible: false
+        },
         scoreLabel: cc.Label,
         gameOverDialog: cc.Node
     },
@@ -47,14 +53,14 @@
 
         
         cc.director.getCollisionManager().enabled = true
-        //cc.director.getCollisionManager().enabledDebugDraw = true
+        cc.director.getCollisionManager().enabledDebugDraw = true
         
         this.initAction()
     },
 
     // called every frame
     update: function (dt) {
-        if (cc.global.game.blockManager.status == 1 && cc.global.game.baffleManager.status == 1) {
+        if (cc.global.game.blockManager.getStatus() == 1 && cc.global.game.baffleManager.status == 1) {
             if (this.snake && this.screenLine) {
                 let distance = this.snake.node.y - this.screenLine.y
                 if (distance > this.offset && !this.isCreating) {
@@ -85,6 +91,8 @@
             this.snake.node.x = 0
             this.snake.node.y = cc.winSize.height / 2
             this.screenLine.y = cc.winSize.height
+            this.snake.score = this.snake.defaultScore
+            this.snake.scoreLabel.string = this.snake.score
         }
         if (this.beanManager) {
             this.beanManager.init()
@@ -97,6 +105,7 @@
             this.baffleManager.init()
         }
         this.score = 0
+        
         if (this.scoreLabel) {
             this.scoreLabel.string = this.score
         }
@@ -116,7 +125,7 @@
         let maxSpeed = 30
         if (Math.abs(this.distance) > maxSpeed) {
             this.distance = this.distance < 0 ? -maxSpeed : maxSpeed
-        } 
+        }
 
 
         if (this.distance > 0 && cc.global.game.isCollision && cc.global.game.ct == 1 && cc.global.game.co == 1) {

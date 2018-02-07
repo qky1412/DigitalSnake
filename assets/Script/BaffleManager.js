@@ -44,7 +44,7 @@ cc.Class({
             //newBean.parent = this.node
             newBaffle.y = cc.winSize.height / 2 + 150 / 2 + currentY + 200 - 75 - newBaffle.height / 2
             //var randomPositon = 150 * Math.floor(5 * Math.random()) + 50 + newBean.width / 2
-            let positionX = 150 * (i + 1) - newBaffle.width / 2 + 1
+            let positionX = 150 * (i + 1) - newBaffle.width / 2
             newBaffle.x = positionX
             newBaffle.getComponent('Baffle').init()
             newBaffle.active = true
