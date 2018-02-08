@@ -22,7 +22,7 @@ cc.Class({
             this.snakeBodyPool.put(body)
         }
 
-        this.addBody(3)
+        // this.addBody(3)
     },
 
     onDestroy: function () {
@@ -38,9 +38,9 @@ cc.Class({
     },
 
     addBody: function (count) {
-        for (let i = 0; i < count; i++) {
-            this.createBody()
-        }
+        // for (let i = 0; i < count; i++) {
+        //     this.createBody()
+        // }
     },
 
     createBody: function () {
