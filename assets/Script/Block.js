@@ -4,12 +4,16 @@ var STATE = cc.Enum({
     BLOCKING: 2,
     FINISH: 3
 })
+
+const BgColor = ['#340099', '#f990ff', '#fa023f', '#f0f5f', '#00ffff', '#f1a000']
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
         score: 1,
         scoreLabel: cc.Label,
+        sprite: cc.Sprite,
         state:{
             default: STATE.NONE,
             type: STATE,
@@ -54,6 +58,8 @@ cc.Class({
         //     cc.global.game.blockManager.status = 1
         //     return
         // }
+        // this.sprite.node.color = cc.hexToColor(BgColor[Math.floor(Math.random() * BgColor.length)])
+        // cc.global.actionManager.blockAction(this.sprite.node)
         cc.global.game.score++
         cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
