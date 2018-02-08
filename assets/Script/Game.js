@@ -51,6 +51,15 @@
         cc.global.game.co = CollisionOrientation.NONE
         this.status = GameStatus.welcome
 
+        //this.map = [[0,0,0,0,0],[-9,-20,-10,-5,-20],[0,-100,0,0,-100],[0,5,0,-100,0],[0,0,203,3,0],[2,100,1,201,0],[202,0,201,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+        this.map = [[202,203,202,201,203],[102,100,0,100,0],[0,0,100,0,0],[102,0,101,0,102],[0,102,0,102,0],
+        [100,0,100,0,102],[202,203,202,201,202],[0,100,100,100,0],[0,100,0,0,102],[100,100,0,102,100],
+        [0,101,102,0,0],[100,0,202,100,0],[0,100,0,100,0],[202,203,201,202,203],[100,100,102,100,102],
+        [100,100,201,100,0],[0,0,102,100,0],[100,0,0,0,102],[102,0,100,0,0],[0,102,0,102,0],
+        [100,0,100,0,0],[202,201,203,201,202],[102,100,100,102,0],[100,0,100,100,102],[0,102,100,0,0],
+        [0,0,100,0,0],[0,0,101,0,102],[0,100,0,100,0],[100,102,0,100,102],[100,102,100,0,0],
+        [100,0,100,0,0],[201,202,203,202,203],[102,100,0,100,102],[0,0,201,0,102],[102,0,102,100,0],
+        [102,100,0,100,0],[0,100,102,100,0],[0,100,0,0,102],[102,0,0,0,0],[0,0,0,0,0]]
         
         cc.director.getCollisionManager().enabled = true
         cc.director.getCollisionManager().enabledDebugDraw = true
@@ -63,7 +72,7 @@
         if (cc.global.game.blockManager.getStatus() == 1 && cc.global.game.baffleManager.status == 1) {
             if (this.snake && this.screenLine) {
                 let distance = this.snake.node.y - this.screenLine.y
-                if (distance > this.offset && !this.isCreating) {
+                if (distance >= this.offset && !this.isCreating) {
                     this.isCreating = true
                     this.screenLine.y = this.snake.node.y
                     let currentY = this.snake.node.y
@@ -79,18 +88,53 @@
     },
 
     create: function (currentY) {
+        var self = this
         if (this.beanManager && this.blockManager && this.baffleManager) {
-            this.beanManager.create(currentY)
-            this.blockManager.create(currentY)
-            this.baffleManager.create(currentY)
+            this.beanManager.recycleAll(currentY)
+            this.blockManager.recycleAll(currentY)
+            this.baffleManager.recycleAll(currentY)
+            let randomNumber = parseInt(Math.random()*7)
+            let currentMap =  this.map.slice(randomNumber*6, randomNumber*6 + 5)
+            
+            currentMap.forEach(function (mapItem, row) {
+                mapItem.forEach(function (value, col) {
+                    if (value == 100) {
+                        self.baffleManager.create(currentY, value, row, col)
+                    } else {
+                        return
+                    }
+                })
+            })
+
+            currentMap.forEach(function (mapItem, row) {
+                mapItem.forEach(function (value, col) {
+                    if ((value > 0 && value < 100) || value == 102) {
+                        self.beanManager.create(currentY, value, row, col)
+                    } else {
+                        return
+                    }
+
+                })
+            })
+            currentMap.forEach(function (mapItem, row) {
+                mapItem.forEach(function (value, col) {
+                    if ((value < 0) || value == 201 || value == 202 || value == 203) {
+                        self.blockManager.create(currentY, value, row, col)
+                    } else {
+                        return
+                    }
+
+                })
+            })
+            
         }
     },
 
     initAction: function () {
         if (this.snake && this.screenLine) {
             this.snake.node.x = 0
-            this.snake.node.y = cc.winSize.height / 2
-            this.screenLine.y = cc.winSize.height
+            this.snake.node.y =  0
+            this.screenLine.y = -cc.winSize.height / 2
             this.snake.score = this.snake.defaultScore
             this.snake.scoreLabel.string = this.snake.score
         }
@@ -112,7 +156,7 @@
         
         this.status = GameStatus.begin
         if (this.snake) {
-            this.offset = (cc.winSize.height / 2)
+            this.offset = (cc.winSize.height)
             cc.find('Canvas').on("touchmove", this.dragMove, this)
         }
     },

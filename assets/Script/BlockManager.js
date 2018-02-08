@@ -53,32 +53,23 @@ cc.Class({
         this.blockings.removeByValue(blockNode.uuid)
     },
 
-    create: function (currentY) {
+    create: function (currentY, value, row, col) {
         //remove previous blocks
         var self = this
-        this.node.children.forEach(function (item) {
-            if (item.y < currentY - (cc.winSize.height / 2)) {
-                item.active = false
-                self.blockPool.push(item)
-            }
-        })
 
-        for(let i = 0; i < 5; i++) {
-            var newBlock = null
-            if(this.blockPool.length == 0) {
-                newBlock = cc.instantiate(this.block)
-            }
-            else {
-                newBlock = this.blockPool.pop()
-            }
-            //newBlock.parent = this.node
-            newBlock.y = cc.winSize.height / 2 + newBlock.height / 2 + currentY + 200
-            let positionX = i * newBlock.width + newBlock.width / 2
-            newBlock.x = positionX
-            newBlock.getComponent('Block').init()
-            newBlock.active = true
-            newBlock.getComponent(cc.BoxCollider).enabled = true
+
+        var newBlock = null
+        if(this.blockPool.length == 0) {
+            newBlock = cc.instantiate(this.block)
         }
+        else {
+            newBlock = this.blockPool.pop()
+        }
+        newBlock.y = currentY + 3 / 2 * cc.winSize.height - (newBlock.height / 2 + row * newBlock.height)
+        newBlock.x = newBlock.width / 2 + col * newBlock.width
+        newBlock.getComponent('Block').init(value)
+        newBlock.active = true
+        newBlock.getComponent(cc.BoxCollider).enabled = true
     },
     recycle: function (node) {
         if (node) {
@@ -89,6 +80,20 @@ cc.Class({
     clear: function () {
         this.node.children.forEach(function (item) {
             item.destroy()
+        })
+    },
+
+    recycleAll: function (currentY) {
+        var self = this
+        let offSet = currentY - cc.winSize.height
+        this.node.children.forEach(function (item) {
+            
+            if ((item.y < offSet) && item.y !== 0) {
+                //console.log('recycle block  item.y = ' + item.y + ' currentY = ' + currentY)
+                item.active = false
+                self.blockPool.push(item)
+                
+            }
         })
     }
 });

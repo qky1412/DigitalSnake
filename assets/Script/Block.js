@@ -17,9 +17,19 @@ cc.Class({
         }
     },
 
-    init: function () {
+    init: function (score) {
         this.state = STATE.NORMAL
-        this.score = 1 +  Math.floor(10 * Math.random())
+        let s = Math.abs(score)
+        let currentSnakeScore = cc.global.game.snake.score
+        if (s == 201) {
+            this.score = Math.floor(Math.random()*( Math.min(50, currentSnakeScore + 20) - Math.max(currentSnakeScore - 10, 1) + 1) + Math.max(currentSnakeScore - 10, 1))
+        } else if (s == 202) {
+            this.score = Math.floor(Math.random()*currentSnakeScore) + 1
+        } else if (s == 203) {
+            this.score = Math.floor(Math.random()*(50 - currentSnakeScore + 1) + currentSnakeScore)
+        } else {
+            this.score = s > 50 ? 50 : s
+        }
         this.scoreLabel.string = this.score + ''
     },
     beginBlock: function () {

@@ -17,9 +17,12 @@ cc.Class({
         }
     },
 
-    init: function () {
+    init: function (score) {
         this.state = STATE.NORMAL
-        this.score = 1 +  Math.floor(5 * Math.random())
+        this.score = score
+        if (score == 102) {
+            this.score = Math.floor(Math.random() * 5) + 1
+        }
         this.scoreLabel.string = this.score + ''
     },
     onCollisionEnter: function(other, self) {

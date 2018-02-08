@@ -50,7 +50,9 @@ cc.Class({
             let blockRank = Math.floor((otherAabb.x ) / 150 + 1 )
 
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
-                cc.global.game.co = 3
+                if (cc.global.game.co == 0) {
+                    cc.global.game.co = 3
+                }
                 console.log('碰到block' + blockRank + other.node.uuid + '的底部')
                 this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
                 other.node.getComponent('Block').beginBlock()
@@ -60,7 +62,8 @@ cc.Class({
              //如果当前已经是处于blocking状态，那么这时候无视后续逻辑
              if (cc.global.game.blockManager.getStatus() == 2) {
                  console.log('碰到block' + blockRank + other.node.uuid + '的底部' + '已经是处于blocking状态')
-                 cc.global.game.blockManager.addBlock(other.node)
+                 console.log('当前co = ' + cc.global.game.co)
+                 //cc.global.game.blockManager.addBlock(other.node)
                  if (cc.global.game.co == 3) {
                     other.node.getComponent('Block').beginBlock()
                  }
@@ -71,11 +74,11 @@ cc.Class({
             otherPreAabb.x = otherAabb.x
 
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
-                if (distance < 0 && selfPreAabb.xMax >= otherPreAabb.xMax) {
+                if (distance < 0 && selfPreAabb.xMax > otherPreAabb.xMax) {
                     cc.global.game.co = 2
                     console.log('碰到block' + blockRank + other.node.uuid + '的右边')
                     this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
-                } else if (distance > 0 && selfPreAabb.xMin <= otherPreAabb.xMin) {
+                } else if (distance > 0 && selfPreAabb.xMin < otherPreAabb.xMin) {
                     cc.global.game.co = 1
                     console.log('碰到block' + blockRank + other.node.uuid + '的左边')
                     this.node.x = otherPreAabb.xMin - selfPreAabb.width / 2 - this.node.parent.x
@@ -96,13 +99,13 @@ cc.Class({
            
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
                 console.log('碰到baffle')
-                if (distance < 0 && selfPreAabb.xMax >= otherPreAabb.xMax) {
+                if (distance < 0 && selfPreAabb.xMax > otherPreAabb.xMax) {
                     cc.global.game.co = 2
                     console.log('碰到右边')
                     console.log('other xMax = ' + otherPreAabb.xMax)
                     console.log('snake x = ' + (self.node.x + 375))
                     this.node.x = otherPreAabb.xMax + selfPreAabb.width / 2 - this.node.parent.x
-                } else if (distance > 0 && selfPreAabb.xMin <= otherPreAabb.xMin) {
+                } else if (distance > 0 && selfPreAabb.xMin < otherPreAabb.xMin) {
                     cc.global.game.co = 1
                     console.log('碰到左边')
                     console.log('other xMin = ' + otherPreAabb.xMin)
@@ -119,6 +122,9 @@ cc.Class({
             
             if (cc.Intersection.rectRect(selfPreAabb, otherPreAabb)) {
                 console.log('碰到baffle底部')
+                if (cc.global.game.co == 1 || cc.global.game.co == 2) {
+                    return
+                }
                 if (selfPreAabb.yMin < otherPreAabb.yMin) {
                     this.node.y = otherPreAabb.yMin - selfPreAabb.height / 2 - this.node.parent.y
                     other.node.getComponent('Baffle').stop()
@@ -135,6 +141,8 @@ cc.Class({
             console.log('snake baffle onCollisionExit')
             if (cc.global.game.blockManager.getStatus() == 1) {
                 cc.global.game.co = 0
+            } else {
+                cc.global.game.co = 3
             }
         }
         
