@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        score: 4,
+        score: 30,
         scoreLabel: cc.Label,
         nextBody: cc.Node,
         lastBody: cc.Node,

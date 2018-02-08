@@ -20,18 +20,19 @@ cc.Class({
     init: function () {
         this.state = STATE.NORMAL
         this.score = 1 +  Math.floor(10 * Math.random())
+        // this.score = 1
         this.scoreLabel.string = this.score + ''
     },
     beginBlock: function () {
-        //console.log('beginBlock')
+        console.log('beginBlock')
         this.state = STATE.BLOCKING
         cc.global.game.blockManager.addBlock()
         this.block()
-        this.schedule(this.block, 0.15, this.score, 0)
+        this.schedule(this.block, 0.5, this.score, 0)
     },
 
     block: function () {
-        cc.global.game.snakeManager.destroyBody()
+        
         if (cc.global.game.blockManager.status == 0) {
             this.unschedule(this.block)
             return
@@ -44,6 +45,8 @@ cc.Class({
         //     cc.global.game.blockManager.status = 1
         //     return
         // }
+
+        cc.global.game.snakeManager.destroyBody()
         cc.global.game.score++
         cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
@@ -56,7 +59,7 @@ cc.Class({
         }
         cc.global.game.snake.score -= 1
         cc.global.game.snake.scoreLabel.string = cc.global.game.snake.score
-        if (cc.global.game.snake.score <= 0) {
+        if (cc.global.game.snake.score < 0) {
             //game over
             cc.global.game.gameOver()
             return

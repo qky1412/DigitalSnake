@@ -685,8 +685,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 50,
-      "height": 50
+      "width": 40,
+      "height": 40
     }
   },
   {
@@ -1037,7 +1037,7 @@
     "baffleManager": {
       "__id__": 27
     },
-    "speed": 200,
+    "speed": 120,
     "screenLine": {
       "__id__": 11
     },

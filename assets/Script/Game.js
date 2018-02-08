@@ -50,6 +50,27 @@
         //cc.director.getCollisionManager().enabledDebugDraw = true
         
         this.initAction()
+        // cc.find('Canvas').on("touchend", this.clickEnd, this)
+    },
+
+    clickEnd: function (dt) {
+        console.log('__________________________')
+        console.log(cc.global.snakeManager.head)
+        var snake = cc.global.snakeManager.head.node
+        var next = snake.getComponent('Snake').nextBody
+        if (next) console.log(next.getComponent('SnakeBody'))
+        
+        while (next)
+        {
+            let newNext = next.getComponent('SnakeBody').nextBody
+
+            if (newNext)
+            {
+                console.log(newNext.getComponent('SnakeBody'))    
+            }
+            
+            next = newNext
+        }
     },
 
     // called every frame
@@ -138,6 +159,10 @@
 
         if (this.snake.node.x + this.distance <= maxX && this.snake.node.x + this.distance >= minX) {
             this.snake.node.x += this.distance
+
+            this.snake.nextBody.getComponent('SnakeBody').duration = Math.max(Math.abs(this.distance * 100), 100)
+
+            console.log('distance:' + this.distance)    
         }
     },
     gameOver: function () {
