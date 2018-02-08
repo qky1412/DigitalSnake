@@ -3,6 +3,7 @@
  var BlockManager = require('BlockManager')
  var SnakeManager = require('SnakeManager')
  var BaffleManager = require('BaffleManager')
+ var Config = require('Config')
  var GameStatus = cc.Enum({
      welcome: 0,
      begin: 1,
@@ -44,7 +45,9 @@
 
     // use this for initialization
     onLoad: function () {
+        console.log('wtf???')
         cc.global = {}
+        cc.global.http = require('Network')
         cc.global.game = this
         cc.global.game.isCollision = false
         cc.global.game.ct = CollisionType.BEAN
@@ -62,7 +65,14 @@
         [102,100,0,100,0],[0,100,102,100,0],[0,100,0,0,102],[102,0,0,0,0],[0,0,0,0,0]]
         
         cc.director.getCollisionManager().enabled = true
-        cc.director.getCollisionManager().enabledDebugDraw = true
+        //cc.director.getCollisionManager().enabledDebugDraw = true
+        
+        cc.global.http.login({platform_id: 'qky1412@gmail.com'}, function (resp) {
+            console.log(resp.data)
+            if (resp.data.token) {
+                Config.setUser(resp.data)
+            }
+        })
         
         this.initAction()
     },
@@ -196,6 +206,9 @@
     gameOver: function () {
         this.status = GameStatus.end
         this.gameOverDialog.active = true
+        cc.global.http.uploadScore(this.score, function (resp) {
+            console.log(resp.data)
+        })
     },
 
     gameRestart: function () {
