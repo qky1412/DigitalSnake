@@ -21,6 +21,13 @@ cc.Class({
         }
     },
 
+    onLoad: function () {
+        this.maxColor = [245, 245, 64]
+        this.middleColor = [64, 245, 64]
+        this.minColor = [64, 245, 245]
+        this.offsetColor = 12
+    },
+
     init: function (score) {
         this.state = STATE.NORMAL
         let s = Math.abs(score)
@@ -35,6 +42,7 @@ cc.Class({
             this.score = s > 50 ? 50 : s
         }
         this.scoreLabel.string = this.score + ''
+        this.sprite.node.color = this.getBgColor(this.score)
     },
     beginBlock: function () {
         //console.log('beginBlock')
@@ -58,11 +66,11 @@ cc.Class({
         //     cc.global.game.blockManager.status = 1
         //     return
         // }
-        // this.sprite.node.color = cc.hexToColor(BgColor[Math.floor(Math.random() * BgColor.length)])
-        // cc.global.actionManager.blockAction(this.sprite.node)
         cc.global.game.score++
         cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
+        this.sprite.node.color = this.getBgColor(this.score)
+        // cc.global.actionManager.blockAction(this.sprite.node)
         this.scoreLabel.string = this.score
         if (this.score == 0) {
             this.state = STATE.FINISH
@@ -91,4 +99,34 @@ cc.Class({
             }
         }
     },
+
+    /**
+     * 根据数值显示背景颜色
+     */
+    getBgColor: function (score) {
+        let offset = 0
+        let color = 0
+        if (score >= 35) {
+            offset = Math.floor(this.offsetColor * (score - 35))
+            color = this.maxColor[1] - offset
+            if (color < 64) {
+                color = 64
+            }
+            return new cc.Color(this.maxColor[0], color, this.maxColor[2])
+        } else if (score >= 18) {
+            offset = Math.floor(this.offsetColor * (score - 18))
+            color = this.middleColor[0] + offset
+            if (color > 245) {
+                color = 245
+            }
+            return new cc.Color(color, this.middleColor[1], this.middleColor[2])
+        } else {
+            offset = Math.floor(this.offsetColor * (score - 1))
+            color = this.minColor[2] - offset
+            if (color < 64) {
+                color = 64
+            }
+            return new cc.Color(this.minColor[0], this.minColor[1], color)
+        }
+    }
 });
