@@ -21,6 +21,12 @@
     RIGHT: 2,
     BOTTOM: 3
 })
+Array.prototype.contains = function(elem) {
+    for (var i in this) {
+        if (this[i] == elem) return true
+    }
+    return false
+}
  cc.Class({
     extends: cc.Component,
 
@@ -65,7 +71,7 @@
         [102,100,0,100,0],[0,100,102,100,0],[0,100,0,0,102],[102,0,0,0,0],[0,0,0,0,0]]
         
         cc.director.getCollisionManager().enabled = true
-        //cc.director.getCollisionManager().enabledDebugDraw = true
+        cc.director.getCollisionManager().enabledDebugDraw = true
         
         cc.global.http.login({platform_id: 'qky1412@gmail.com'}, function (resp) {
             console.log(resp.data)
@@ -81,12 +87,15 @@
     update: function (dt) {
         if (cc.global.game.blockManager.getStatus() == 1 && cc.global.game.baffleManager.status == 1) {
             if (this.snake && this.screenLine) {
-                let distance = this.snake.node.y - this.screenLine.y
+                let snakeY = this.snake.node.y
+                let lineY = this.screenLine.y
+                let distance = snakeY - lineY
                 if (distance >= this.offset && !this.isCreating) {
+                    console.log('distance = ' + distance)
+                    console.log('create map')
                     this.isCreating = true
-                    this.screenLine.y = this.snake.node.y
-                    let currentY = this.snake.node.y
-                    this.create(currentY)
+                    this.screenLine.y = snakeY
+                    this.create(snakeY)
                     this.isCreating = false
                 }
             }
@@ -141,10 +150,11 @@
     },
 
     initAction: function () {
+        this.offset = (cc.winSize.height)
         if (this.snake && this.screenLine) {
             this.snake.node.x = 0
             this.snake.node.y =  0
-            this.screenLine.y = -cc.winSize.height / 2
+            this.screenLine.y = -cc.winSize.height
             this.snake.score = this.snake.defaultScore
             this.snake.scoreLabel.string = this.snake.score
         }
@@ -166,7 +176,7 @@
         
         this.status = GameStatus.begin
         if (this.snake) {
-            this.offset = (cc.winSize.height)
+            
             cc.find('Canvas').on("touchmove", this.dragMove, this)
         }
     },

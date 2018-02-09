@@ -12,7 +12,7 @@ cc.Class({
 
     init: function () {
         this.beanPool = []
-        for (let i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
             let newBean = cc.instantiate(this.bean)
             newBean.parent = this.node
             newBean.active = false
@@ -33,32 +33,27 @@ cc.Class({
         newBean.y = currentY + 3 / 2 * cc.winSize.height - (150 / 2 + row * 150)
         newBean.x = 150 / 2 + col * 150
         newBean.getComponent('Bean').init(value)
+        newBean.getComponent('Bean').nodeBgColor.color = cc.hexToColor('#ffffff')
         newBean.active = true
         newBean.getComponent(cc.BoxCollider).enabled = true
     },
-    onCollsionEnter: function (other, self) {
-        //如果是豆子
-        if (other.tag == 200) {
-            other.node.active = false
-            this.beanPool.push(other.node)
-        }
-    },
 
-    recycle: function (node) {
+    hide: function (node) {
         if (node) {
+            //node.getComponent('Bean').nodeBgColor.color = cc.hexToColor('#000000')
+            node.getComponent(cc.BoxCollider).enabled = false
             node.active = false
-            this.beanPool.push(node)
+            //this.beanPool.push(node)
         }
     },
 
     recycleAll: function (currentY) {
         var self = this
-        let offSet = currentY - cc.winSize.height
+        let offSet = currentY - cc.winSize.height / 2
         this.node.children.forEach(function (item) {
-            if ((item.y < (currentY - cc.winSize.height)) && item.y !== 0) {
-                //console.log('recycle bean  item.y = ' + item.y + ' currentY = ' + currentY)
-                item.active = false
-                self.beanPool.push(item)
+            if (item.y < offSet && item.y !== 0) {
+                //item.active = false
+                self.recycle(item)
             }
         })
     },
@@ -67,6 +62,11 @@ cc.Class({
         this.node.children.forEach(function (item) {
             item.destroy()
         })
+    },
+    recycle: function (node) {
+        if (!this.beanPool.contains(node)) {
+            this.beanPool.push(node)
+        }
     }
 
 });

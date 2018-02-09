@@ -116,13 +116,13 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{13,148}</string>
+                <string>{15,138}</string>
                 <key>spriteSourceSize</key>
-                <string>{13,148}</string>
+                <string>{15,150}</string>
                 <key>textureRect</key>
-                <string>{{1,753},{13,148}}</string>
+                <string>{{1691,65},{15,138}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>img_white.png</key>
             <dict>
@@ -183,7 +183,7 @@
             <key>size</key>
             <string>{1717,768}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:ed3856135f9b44af6192c9921fcda7ec:8342b337f764057850563a508329d9e5:2b6b044cd39571cff4658ef1ad48d114$</string>
+            <string>$TexturePacker:SmartUpdate:7a05e13b19934b2c6942ea6bf8860e74:769c51ff73e2956fafe63fd623828e41:2b6b044cd39571cff4658ef1ad48d114$</string>
             <key>textureFileName</key>
             <string>doge.png</string>
         </dict>

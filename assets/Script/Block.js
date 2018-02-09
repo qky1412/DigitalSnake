@@ -5,7 +5,7 @@ var STATE = cc.Enum({
     FINISH: 3
 })
 
-const BgColor = ['#340099', '#f990ff', '#fa023f', '#f0f5f', '#00ffff', '#f1a000']
+const BgColor = ['#00fffff', '#39e7c0', '#26d075', '#fff100', '#ff3747']
 
 cc.Class({
     extends: cc.Component,
@@ -34,6 +34,17 @@ cc.Class({
         } else {
             this.score = s > 50 ? 50 : s
         }
+        if (this.score > 40) {
+            this.sprite.node.color = cc.hexToColor(BgColor[4])
+        } else if (this.score > 30) {
+            this.sprite.node.color = cc.hexToColor(BgColor[3])
+        } else if (this.score > 20) {
+            this.sprite.node.color = cc.hexToColor(BgColor[2])
+        } else if (this.score > 10) {
+            this.sprite.node.color = cc.hexToColor(BgColor[1])
+        } else {
+            this.sprite.node.color = cc.hexToColor(BgColor[0])
+        }
         this.scoreLabel.string = this.score + ''
     },
     beginBlock: function () {
@@ -58,8 +69,8 @@ cc.Class({
         //     cc.global.game.blockManager.status = 1
         //     return
         // }
-        // this.sprite.node.color = cc.hexToColor(BgColor[Math.floor(Math.random() * BgColor.length)])
-        // cc.global.actionManager.blockAction(this.sprite.node)
+        this.sprite.node.color = cc.hexToColor(BgColor[Math.floor(Math.random() * BgColor.length)])
+        cc.global.actionManager.blockAction(this.sprite.node)
         cc.global.game.score++
         cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
@@ -68,7 +79,7 @@ cc.Class({
             this.state = STATE.FINISH
             cc.global.game.blockManager.removeBlock(this.node)
             this.getComponent(cc.BoxCollider).enabled = false
-            cc.global.game.blockManager.recycle(this.node)
+            cc.global.game.blockManager.hide(this.node)
         }
         cc.global.game.snake.score -= 1
         cc.global.game.snake.scoreLabel.string = cc.global.game.snake.score

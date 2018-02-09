@@ -9,13 +9,11 @@ cc.Class({
         scoreLabel: cc.Label,
         nextBody: cc.Node,
         lastBody: cc.Node,
-        duration: 30
-    },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    onLoad () {
-        this.defaultScore = 6
+        duration: 30,
+        defaultScore: {
+            default: 6,
+            visible: false
+        }
     },
 
     update (dt) {
@@ -34,6 +32,7 @@ cc.Class({
             this.score += bean.score
             this.scoreLabel.string = this.score
             cc.global.game.snakeManager.addBody(bean.score)
+            cc.global.game.beanManager.hide(other.node)
             return
         } else if (other.tag == 200) {
             //console.log('snake block onCollisionEnter')

@@ -47,7 +47,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 13,
+      "width": 15,
       "height": 150
     },
     "_rotationX": 0,
@@ -87,7 +87,7 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_atlas": {
@@ -110,7 +110,7 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 8,
+      "width": 15,
       "height": 150
     }
   },

@@ -13,7 +13,7 @@ cc.Class({
     init: function() {
         this.status = 1
         this.bafflePool = []
-        for (let i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
             let newBaffle = cc.instantiate(this.baffle)
             newBaffle.parent = this.node
             newBaffle.active = false
@@ -43,13 +43,16 @@ cc.Class({
     },
     recycleAll: function (currentY) {
         var self = this
-        let offSet = currentY - cc.winSize.height
+        let offSet = currentY - cc.winSize.height / 2
         this.node.children.forEach(function (item) {
-            if ((item.y < (currentY - cc.winSize.height)) && item.y !== 0) {
-                //console.log('recycle baffle  item.y = ' + item.y + ' currentY = ' + currentY)
-                item.active = false
-                self.bafflePool.push(item)
+            if (item.y < offSet && item.y !== 0) {
+                self.recycle(item)
             }
         })
+    },
+    recycle: function (node) {
+        if (!this.bafflePool.contains(node)) {
+            this.bafflePool.push(node)
+        }
     }
 });

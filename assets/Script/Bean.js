@@ -24,12 +24,6 @@ cc.Class({
             this.score = Math.floor(Math.random() * 5) + 1
         }
         this.scoreLabel.string = this.score + ''
-    },
-    onCollisionEnter: function(other, self) {
-        if (other.tag == 0) {
-            this.getComponent(cc.BoxCollider).enabled = false
-            cc.global.game.beanManager.recycle(this.node)
-        }
-    },
+    }
 
 });

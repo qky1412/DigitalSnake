@@ -21,7 +21,7 @@ cc.Class({
     init: function () {
         this.status = 1
         this.blockPool = []
-        for(let i = 0; i < 20; i++) {
+        for(var i = 0; i < 20; i++) {
             let newBlock = cc.instantiate(this.block)
             newBlock.parent = this.node
             newBlock.active = false
@@ -42,22 +42,17 @@ cc.Class({
     },
 
     addBlock: function (blockNode) {
-        console.log('add block ' + blockNode.uuid)
         if (this.blockings.indexOf(blockNode.uuid) == -1) {
             this.blockings.push(blockNode.uuid)
         }
     },
 
     removeBlock: function (blockNode) {
-        console.log('remove block ' + blockNode.uuid)
         this.blockings.removeByValue(blockNode.uuid)
     },
 
     create: function (currentY, value, row, col) {
-        //remove previous blocks
         var self = this
-
-
         var newBlock = null
         if(this.blockPool.length == 0) {
             newBlock = cc.instantiate(this.block)
@@ -71,10 +66,11 @@ cc.Class({
         newBlock.active = true
         newBlock.getComponent(cc.BoxCollider).enabled = true
     },
-    recycle: function (node) {
+    hide: function (node) {
         if (node) {
+            node.getComponent(cc.BoxCollider).enabled = false
             node.active = false
-            this.blockPool.push(node)
+            //this.blockPool.push(node)
         }
     },
     clear: function () {
@@ -85,15 +81,19 @@ cc.Class({
 
     recycleAll: function (currentY) {
         var self = this
-        let offSet = currentY - cc.winSize.height
+        let offSet = currentY - cc.winSize.height / 2
         this.node.children.forEach(function (item) {
             
-            if ((item.y < offSet) && item.y !== 0) {
-                //console.log('recycle block  item.y = ' + item.y + ' currentY = ' + currentY)
-                item.active = false
-                self.blockPool.push(item)
-                
+            if (item.y < offSet && item.y !== 0) {
+                item.getComponent('Block').sprite.node.color = cc.hexToColor('#000000')
+                self.recycle(item)
             }
         })
+    },
+
+    recycle: function (node) {
+        if (!this.blockPool.contains(node)) {
+            this.blockPool.push(node)
+        }
     }
 });
