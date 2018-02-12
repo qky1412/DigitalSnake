@@ -60,7 +60,7 @@ cc.Class({
         this.state = STATE.BLOCKING
         cc.global.game.blockManager.addBlock(this.node)
         this.block()
-        this.schedule(this.block, 0.15, this.score, 0)
+        this.schedule(this.block, 0.1, this.score, 0)
     },
 
     block: function () {
@@ -82,7 +82,7 @@ cc.Class({
         cc.global.game.scoreLabel.string = cc.global.game.score
         this.score -= 1
         this.sprite.node.color = this.getBgColor(this.score)
-        // cc.global.actionManager.blockAction(this.sprite.node)
+        cc.global.actionManager.blockAction(this.sprite.node)
         this.scoreLabel.string = this.score
         if (this.score == 0) {
             this.state = STATE.FINISH

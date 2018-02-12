@@ -37,7 +37,7 @@ Array.prototype.contains = function(elem) {
         snakeManager: SnakeManager,
         baffleManager: BaffleManager,
         speed:  {
-            default: 200,
+            default: 250,
             visible: false
         },
         screenLine: cc.Node,
@@ -46,12 +46,13 @@ Array.prototype.contains = function(elem) {
             visible: false
         },
         scoreLabel: cc.Label,
-        gameOverDialog: cc.Node
+        gameOverDialog: cc.Node,
+        gameOverScoreLabel: cc.Label,
+        gameOverHighestScoreLabel: cc.Label
     },
 
     // use this for initialization
     onLoad: function () {
-        console.log('wtf???')
         cc.global = {}
         cc.global.http = require('Network')
         cc.global.game = this
@@ -71,7 +72,7 @@ Array.prototype.contains = function(elem) {
         [102,100,0,100,0],[0,100,102,100,0],[0,100,0,0,102],[102,0,0,0,0],[0,0,0,0,0]]
         
         cc.director.getCollisionManager().enabled = true
-        cc.director.getCollisionManager().enabledDebugDraw = true
+        //cc.director.getCollisionManager().enabledDebugDraw = true
         
         cc.global.http.login({platform_id: 'qky1412@gmail.com'}, function (resp) {
             console.log(resp.data)
@@ -216,9 +217,13 @@ Array.prototype.contains = function(elem) {
     gameOver: function () {
         this.status = GameStatus.end
         this.gameOverDialog.active = true
-        cc.global.http.uploadScore(this.score, function (resp) {
-            console.log(resp.data)
-        })
+        this.gameOverScoreLabel.string = this.score
+        this.gameOverHighestScoreLabel.string = this.getHighestLocalScore()
+        this.setLocalScore(this.score)
+        
+        // cc.global.http.uploadScore(this.score, function (resp) {
+        //     console.log(resp.data)
+        // })
     },
 
     gameRestart: function () {
@@ -230,5 +235,16 @@ Array.prototype.contains = function(elem) {
             this.baffleManager.clear()
         }
         this.initAction()
+    },
+
+    getHighestLocalScore: function () {
+        return cc.sys.localStorage.getItem('local_score') || 0
+    },
+
+    setLocalScore: function (score) {
+        let localScore = this.getHighestLocalScore()
+        if (score > localScore) {
+            cc.sys.localStorage.setItem('local_score', parseInt(score))
+        }
     }
 });
