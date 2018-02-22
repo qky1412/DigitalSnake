@@ -18,12 +18,12 @@ cc.Class({
     createGrid: function () {
         this.line = this.editBox.string
         if (this.line.length == 0) {
-            console.log('请输入数字')
+            //console.log('请输入数字')
             return
         }
         this.line = Math.floor(this.line)
         if (this.line > 50) {
-            console.log('输入的数字太大')
+            //console.log('输入的数字太大')
             return
         }
         for (let i = 0; i < this.line * 5; i++) {
@@ -42,7 +42,7 @@ cc.Class({
     createMap: function () {
         var children = this.layout.children
         if (!children || children.length == 0) {
-            console.log('请先生成网格')
+            //console.log('请先生成网格')
             return
         }
         var dataSet = []
@@ -63,7 +63,7 @@ cc.Class({
         }
         dataSetStr = dataSetStr.substring(0, dataSetStr.length - 1)
         dataSetStr += ']'
-        console.log(dataSet)
+        //console.log(dataSet)
         alert(dataSetStr)
     },
 

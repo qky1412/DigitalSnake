@@ -52,18 +52,18 @@ cc.Class({
         }
         var num = this.editBox.string
         if (num.length == 0) {
-            console.log('请输入数字')
+            //console.log('请输入数字')
             return
         }
         num = Math.floor(num)
         if (num === 0) {
-            console.log('请输入不为0的数字')
+            //console.log('请输入不为0的数字')
             return
         }
         if (cc.global.mapType === 1) {
             // bean
             if (num > 5) {
-                console.log('请输入小于5的数字')
+                //console.log('请输入小于5的数字')
                 return
             }
         }

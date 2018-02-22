@@ -15,7 +15,7 @@ cc.Class({
         var self = this
         this.num = 0
         this.node.on(cc.Node.EventType.TOUCH_END, function () {
-            console.log('type : ' + cc.global.mapType)
+            //console.log('type : ' + cc.global.mapType)
             cc.global.inputNumberDialog.mapItem = self
             cc.global.inputNumberDialog.show()
         }, this)

@@ -75,7 +75,7 @@ Array.prototype.contains = function(elem) {
         //cc.director.getCollisionManager().enabledDebugDraw = true
         
         cc.global.http.login({platform_id: 'qky1412@gmail.com'}, function (resp) {
-            console.log(resp.data)
+            //console.log(resp.data)
             if (resp.data.token) {
                 Config.setUser(resp.data)
             }
@@ -92,8 +92,8 @@ Array.prototype.contains = function(elem) {
                 let lineY = this.screenLine.y
                 let distance = snakeY - lineY
                 if (distance >= this.offset && !this.isCreating) {
-                    console.log('distance = ' + distance)
-                    console.log('create map')
+                    //console.log('distance = ' + distance)
+                    //console.log('create map')
                     this.isCreating = true
                     this.screenLine.y = snakeY
                     this.create(snakeY)
@@ -222,7 +222,7 @@ Array.prototype.contains = function(elem) {
         this.setLocalScore(this.score)
         
         // cc.global.http.uploadScore(this.score, function (resp) {
-        //     console.log(resp.data)
+        //     //console.log(resp.data)
         // })
     },
 

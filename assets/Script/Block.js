@@ -56,7 +56,7 @@ cc.Class({
         this.sprite.node.color = this.getBgColor(this.score)
     },
     beginBlock: function () {
-        //console.log('beginBlock')
+        ////console.log('beginBlock')
         this.state = STATE.BLOCKING
         cc.global.game.blockManager.addBlock(this.node)
         this.block()
@@ -103,9 +103,9 @@ cc.Class({
     onCollisionExit: function(other, self) {
         //如果是snake
         if(other.tag == 0) {
-            //console.log('block onCollisionExit')
+            ////console.log('block onCollisionExit')
             if (this.node && this.state != STATE.FINISH) {
-                //console.log('block still exist')
+                ////console.log('block still exist')
                 cc.global.game.blockManager.removeBlock(this.node)
                 this.unschedule(this.block)
             }

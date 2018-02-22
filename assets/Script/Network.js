@@ -23,7 +23,7 @@ cc.Class({
             
             xhr.timeout = 10000
             xhr.ontimeout = function () {
-                console.log('HTTP TIME OUT')
+                //console.log('HTTP TIME OUT')
             }
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && (xhr.status >= 200 && xhr.status < 300)) {
@@ -32,7 +32,7 @@ cc.Class({
                         handler(ret)
                     }
                 } else if (xhr.readyState === 4) {
-                    console.log('网络异常，请稍后重试')
+                    //console.log('网络异常，请稍后重试')
                 }
             }
             if (data) {
